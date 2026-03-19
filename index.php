@@ -1,5 +1,17 @@
 <?php
+$dbhost = "localhost";
+$dbuser = "root";
+$dbpass = "";
+$dbname = "veilys";
+
 $rssurl = "https://www.numerama.com/feed/";
+$sqlconnexion = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+if ($sqlconnexion->connect_error) {
+    die("Erreur de connexion SQL : " . $sqlconnexion->connect_error);
+}
+$sqlconnexion->set_charset("utf8mb4");
+
+
 
 $rss = simplexml_load_file($rssurl);
 
@@ -15,14 +27,35 @@ if ($rss) {
         $link = $item->link;
         $date = date('d/m/Y', strtotime($item->pubDate));
 
+        $check = $sqlconnexion->prepare("SELECT articleID FROM articles WHERE lien = ?");
+        $check->bind_param("s", $link);
+        $check->execute();
+        $check->store_result();
+
         echo "<li>";
+        if ($check->num_rows == 0) {
+            $insert = $sqlconnexion->prepare("INSERT INTO articles (titre, lien, date) VALUES (?, ?, ?)");
+            $insert->bind_param("sss", $title, $link, $date);
+            $insert->execute();
+            echo "Article enregistré en base de données : ";
+        } else {
+            echo "Article déjà enregistré en base de données : ";
+        }
+
+
         echo "<strong><a href='$link' target='_blank'>$title</a></strong><br>";
         echo "<em>Publié le $date</em>";
         echo "</li><br>";
+
+        $check->close();
+        if (isset($insert)) {
+            $insert->close();
+        }
 
         $i++;
     }
 }
 
 
-echo "<ul>";
+echo "</ul>";
+$sqlconnexion->close();
