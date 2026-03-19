@@ -49,8 +49,8 @@ if ($result->num_rows > 0) {
         
         Renvoie-moi UNIQUEMENT un objet JSON valide avec deux clés :
         - \"resume\" : Rédige un résumé très clair de 2 phrases maximum sur le sujet de l'article.
-        - \"pertinent\" : Mets 1 si ça parle de technologie, d'IA, de cybersécurité ou de science. Mets 0 sinon.
-        Ne renvoie aucun autre texte, pas de blabla, juste le JSON brut.";
+        - \"pertinent\" : Mets 1 à la pertinence si le sujet de l'article est sur la cybersécurité dans le développement logiciel ou web. 
+        Ne renvoie aucun autre texte, pas de blabla, juste le JSON brut, ne met pas le JSON dans un bloc";
     $url_ia = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . GEMINI_API_KEY;
     $data_ia = [
             "contents" => [
@@ -66,14 +66,23 @@ if ($result->num_rows > 0) {
         curl_setopt($ch_ia, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch_ia, CURLOPT_SSL_VERIFYHOST, false);
         
-        $reponse_api = curl_exec($ch_ia);
+        $responseapi = curl_exec($ch_ia);
         curl_close($ch_ia);
 
-        $responsedecode = json_decode($reponse_api, true);        
+        $responsedecode = json_decode($responseapi, true);        
         if (isset($responsedecode['candidates'][0]['content']['parts'][0]['text'])) {    
-            $texte_ia = $responsedecode['candidates'][0]['content']['parts'][0]['text'];
-            echo "<br><strong>Réponse de l'IA :</strong><br>";
-            echo $texte_ia;
+            $texteia = $responsedecode['candidates'][0]['content']['parts'][0]['text'];
+            $texteiaclean = str_replace(['```json', '```'], '', $texteia);
+            $texteiaclean = trim($texteiaclean);
+
+            $datajsonia = json_decode($texteiaclean, true);
+  
+        if (json_last_error() === JSON_ERROR_NONE && isset($datajsonia['resume'])) {
+            $resume = $datajsonia['resume'];
+            $pertinent = (int)$datajsonia['pertinent'];
+
+            echo $resume;
+        }
             
         } else {
             echo "Erreur : L'IA n'a pas répondu comme prévu.";
