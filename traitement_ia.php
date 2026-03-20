@@ -91,7 +91,8 @@ if ($result->num_rows > 0) {
             echo "Erreur : N'a pas réussis à décoder le JSON";
         }
     } else {
-        echo "Erreur : L'IA n'a pas répondu comme prévu.";
+        echo "Erreur : L'IA n'a pas répondu comme prévu. <br>";
+        echo $responseapi;
     }
 } else {
     echo "Rien à traiter";
