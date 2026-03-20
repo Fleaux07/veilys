@@ -1,0 +1,146 @@
+/* --- BASE & FOND ECRAN --- */
+body { 
+    font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; 
+    background-color: #0f172a; /* Bleu nuit très profond */
+    color: #e2e8f0; /* Texte gris clair très lisible */
+    margin: 0; 
+    padding: 40px 20px; 
+}
+.container { 
+    max-width: 1100px; 
+    margin: 0 auto; 
+}
+
+/* --- TITRES --- */
+h1 { 
+    color: #f8fafc; 
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+}
+h2 {
+    color: #f8fafc;
+    margin-top: 50px;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 15px;
+}
+
+/* --- ZONE 1 : STATISTIQUES --- */
+.stats-grid { 
+    display: flex; 
+    gap: 25px; 
+    margin-bottom: 30px; 
+}
+.stat-card { 
+    background: #1e293b; /* Cartes légèrement plus claires que le fond */
+    padding: 25px; 
+    border-radius: 12px; 
+    border: 1px solid #334155;
+    flex: 1; 
+    text-align: center; 
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: #38bdf8;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+.stat-card h3 { 
+    margin: 0; 
+    color: #94a3b8; 
+    font-size: 14px; 
+    letter-spacing: 1px; 
+    text-transform: uppercase; 
+}
+.stat-card .nombre { 
+    font-size: 42px; 
+    font-weight: 900; 
+    margin-top: 15px;
+    /* Effet de texte en dégradé */
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* --- ZONE 2 : BOUTONS D'ACTION --- */
+.actions { 
+    background: #1e293b; 
+    padding: 25px; 
+    border-radius: 12px; 
+    border: 1px solid #334155;
+    display: flex; 
+    align-items: center;
+    gap: 20px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.actions strong {
+    color: #94a3b8;
+    font-size: 16px;
+}
+.btn { 
+    padding: 12px 24px; 
+    text-decoration: none; 
+    color: white; 
+    border-radius: 8px; 
+    font-weight: 600; 
+    transition: all 0.3s ease;
+    border: none;
+}
+.btn-source { 
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+}
+.btn-source:hover { 
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+.btn-ia { 
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+}
+.btn-ia:hover { 
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+/* --- ZONE 3 : LISTE DES ARTICLES --- */
+.article-card { 
+    background: #1e293b; 
+    padding: 25px; 
+    border-radius: 12px; 
+    border: 1px solid #334155;
+    border-left: 5px solid #10b981; /* Ligne verte fluo sur la gauche */
+    margin-bottom: 20px; 
+    transition: all 0.2s ease;
+}
+.article-card:hover {
+    background: #273449;
+    border-left-color: #34d399;
+}
+.article-card a { 
+    color: #f8fafc; 
+    text-decoration: none; 
+    font-size: 20px; 
+    font-weight: bold; 
+    display: block;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+.article-card a:hover { 
+    color: #38bdf8; 
+}
+.resume { 
+    color: #cbd5e1; 
+    line-height: 1.6; 
+    background: #0f172a; /* Fond encore plus sombre pour le résumé */
+    padding: 15px 20px; 
+    border-radius: 8px; 
+    border: 1px solid #1e293b;
+    font-size: 15px;
+}
+.resume strong {
+    color: #10b981; /* Texte "Résumé IA" en vert fluo */
+    margin-right: 5px;
+}
