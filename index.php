@@ -4,7 +4,7 @@ $dbuser = "root";
 $dbpass = "";
 $dbname = "veilys";
 
-$rssurl = "https://www.numerama.com/feed/";
+$rssurl = "https://www.cert.ssi.gouv.fr/feed/";
 $sqlconnexion = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 if ($sqlconnexion->connect_error) {
     die("Erreur de connexion SQL : " . $sqlconnexion->connect_error);
@@ -22,7 +22,7 @@ if ($rss) {
     $i = 0;
 
     foreach ($rss->channel->item as $item) {
-        if ($i >= 5) break;
+        if ($i >= 15) break;
         $title = $item->title;
         $link = $item->link;
         $date = date('d/m/Y', strtotime($item->pubDate));

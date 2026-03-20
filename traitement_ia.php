@@ -49,49 +49,50 @@ if ($result->num_rows > 0) {
         
         Renvoie-moi UNIQUEMENT un objet JSON valide avec deux clés :
         - \"resume\" : Rédige un résumé très clair de 2 phrases maximum sur le sujet de l'article.
-        - \"pertinent\" : Mets 1 à la pertinence si le sujet de l'article est sur la cybersécurité dans le développement logiciel ou web. 
+        - \"pertinent\" : Mets 1 à la pertinence si le sujet de l'article est sur la cybersécurité dans le développement logiciel ou web, l'aspect
+        DEVELOPPEMENT doit primer, le thème de ma veille est vraiment la cybersécurité dans le développement logiciel. 
         Ne renvoie aucun autre texte, pas de blabla, juste le JSON brut, ne met pas le JSON dans un bloc";
     $url_ia = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . GEMINI_API_KEY;
     $data_ia = [
-            "contents" => [
-                ["parts" => [["text" => $prompt]]]
-            ]
-        ];
-        
-        $ch_ia = curl_init($url_ia);
-        curl_setopt($ch_ia, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch_ia, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        curl_setopt($ch_ia, CURLOPT_POST, true);
-        curl_setopt($ch_ia, CURLOPT_POSTFIELDS, json_encode($data_ia));
-        curl_setopt($ch_ia, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch_ia, CURLOPT_SSL_VERIFYHOST, false);
-        
-        $responseapi = curl_exec($ch_ia);
-        curl_close($ch_ia);
+        "contents" => [
+            ["parts" => [["text" => $prompt]]]
+        ]
+    ];
 
-        $responsedecode = json_decode($responseapi, true);        
-        if (isset($responsedecode['candidates'][0]['content']['parts'][0]['text'])) {    
-            $texteia = $responsedecode['candidates'][0]['content']['parts'][0]['text'];
-            $texteiaclean = str_replace(['```json', '```'], '', $texteia);
-            $texteiaclean = trim($texteiaclean);
+    $ch_ia = curl_init($url_ia);
+    curl_setopt($ch_ia, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch_ia, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    curl_setopt($ch_ia, CURLOPT_POST, true);
+    curl_setopt($ch_ia, CURLOPT_POSTFIELDS, json_encode($data_ia));
+    curl_setopt($ch_ia, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch_ia, CURLOPT_SSL_VERIFYHOST, false);
 
-            $datajsonia = json_decode($texteiaclean, true);
-  
+    $responseapi = curl_exec($ch_ia);
+    curl_close($ch_ia);
+
+    $responsedecode = json_decode($responseapi, true);
+    if (isset($responsedecode['candidates'][0]['content']['parts'][0]['text'])) {
+        $texteia = $responsedecode['candidates'][0]['content']['parts'][0]['text'];
+        $texteiaclean = str_replace(['```json', '```'], '', $texteia);
+        $texteiaclean = trim($texteiaclean);
+
+        $datajsonia = json_decode($texteiaclean, true);
+
         if (json_last_error() === JSON_ERROR_NONE && isset($datajsonia['resume'])) {
             $resume = $datajsonia['resume'];
             $pertinent = (int)$datajsonia['pertinent'];
 
-            echo $resume;
-        }
-            
+            echo $resume . $pertinent;
+
+            $update = $sqlconnexion->prepare("UPDATE articles SET resume_ia = ?, pertinent_ia = ? WHERE articleID = ?");
+            $update->bind_param("sii", $resume, $pertinent, $id);
+            $update->execute();
         } else {
-            echo "Erreur : L'IA n'a pas répondu comme prévu.";
+            echo "Erreur : N'a pas réussis à décoder le JSON";
         }
-
-
-
-
-
     } else {
+        echo "Erreur : L'IA n'a pas répondu comme prévu.";
+    }
+} else {
     echo "Rien à traiter";
 }
