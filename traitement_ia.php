@@ -37,8 +37,7 @@ if ($result->num_rows > 0) {
         $texthtml = strip_tags($htmlclean);
         $cleantext = preg_replace('/\s+/', ' ', $texthtml);
 
-        echo "Page aspiré et nettoyer";
-        echo "<em>" . substr($cleantext, 0, 300) . "...</em>";
+        echo "Page aspiré et nettoyer <br>";
     } else {
         echo "Page imposssible à aspiré";
     }

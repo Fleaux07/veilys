@@ -22,7 +22,7 @@ $articles_pertinents = $sqlquery->get_result();
 <head>
     <meta charset="UTF-8">
     <title>Mon Dashboard Cyber</title>
-    <link href="style.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
 
