@@ -94,5 +94,5 @@ if ($result->num_rows > 0) {
         echo $responseapi;
     }
 } else {
-    echo "Rien à traiter";
+    echo "Rien à traiter";  
 }
